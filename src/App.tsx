@@ -11,6 +11,7 @@ import { Canvas3D }     from './components/Canvas3D'
 import { Preloader }    from './components/Preloader'
 import { CustomCursor } from './components/CustomCursor'
 import { TimelineHUD }  from './components/TimelineHUD'
+import { AIAgent }      from './components/AIAgent'
 import { playRipple, resumeAudio } from './utils/audio'
 
 const SECTION_PORTS = [
@@ -101,6 +102,9 @@ export const App: React.FC = () => {
         </main>
 
         <div className="pb-14" style={{ touchAction: 'pan-y' }}><Footer /></div>
+
+        {/* Floating AI Career Assistant — fixed overlay, visible across all sections */}
+        <AIAgent />
       </div>
     </>
   )
