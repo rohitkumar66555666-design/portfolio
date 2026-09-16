@@ -84,6 +84,9 @@ const QUICK_REPLIES = [
   { label: '📬 Contact', query: 'How can I contact Rohit?' },
 ]
 
+/* Simulated "thinking" delay before any AI reply is revealed (ms) */
+const TYPING_DELAY_MS = 5000
+
 /* ── Fallback parser: keyword scoring with word-boundary safety ────── */
 
 function getResponse(raw) {
@@ -167,11 +170,12 @@ export const AIAgent = () => {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([{ id: 1, from: 'ai', text: WELCOME }])
   const [input, setInput] = useState('')
-  const [typing, setTyping] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
   const idRef = useRef(1)
   const messagesRef = useRef(messages)
   const mountedRef = useRef(true)
   const scrollRef = useRef(null)
+  const timerRef = useRef(null)
 
   messagesRef.current = messages
 
@@ -179,7 +183,7 @@ export const AIAgent = () => {
   useEffect(() => {
     const el = scrollRef.current
     if (el) el.scrollTop = el.scrollHeight
-  }, [messages, typing, open])
+  }, [messages, isTyping, open])
 
   /* Escape closes the chat */
   useEffect(() => {
@@ -191,46 +195,49 @@ export const AIAgent = () => {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  /* guard async state updates after unmount */
+  /* guard async state updates after unmount + clear pending reply timer */
   useEffect(() => {
     mountedRef.current = true
     return () => {
       mountedRef.current = false
+      clearTimeout(timerRef.current)
     }
   }, [])
 
   const send = useCallback(
     async (rawText) => {
       const text = (rawText || '').trim()
-      if (!text || typing) return
+      if (!text || isTyping) return
 
       idRef.current += 1
       const userMsg = { id: idRef.current, from: 'user', text }
       const history = [...messagesRef.current, userMsg]
       setMessages(history)
       setInput('')
-      setTyping(true)
 
-      // 1) Try the real LLM (Groq via /api/chat, system prompt server-side)
-      const llmReply = await fetchLLMReply(history.slice(-12))
+      // 1) Mark the AI as typing immediately
+      setIsTyping(true)
+
+      // 2) Resolve the reply (live LLM → local KB fallback) and hold it
+      //    behind a fixed 5s setTimeout so the typing simulation feels real.
+      //    The reply is revealed only once BOTH have completed.
+      const fetchPromise = fetchLLMReply(history.slice(-12))
+      const delayPromise = new Promise((resolve) => {
+        timerRef.current = setTimeout(resolve, TYPING_DELAY_MS)
+      })
+      const [llmReply] = await Promise.all([fetchPromise, delayPromise])
 
       if (!mountedRef.current) return
-      if (llmReply) {
-        idRef.current += 1
-        setMessages((prev) => [...prev, { id: idRef.current, from: 'ai', text: llmReply }])
-        setTyping(false)
-        return
-      }
 
-      // 2) Graceful fallback: local knowledge base with a human-ish pause
-      await new Promise((resolve) => setTimeout(resolve, 650 + Math.random() * 550))
-      if (!mountedRef.current) return
-
+      // 3) Append the AI response and stop the typing indicator
       idRef.current += 1
-      setMessages((prev) => [...prev, { id: idRef.current, from: 'ai', text: getResponse(text) }])
-      setTyping(false)
+      setMessages((prev) => [
+        ...prev,
+        { id: idRef.current, from: 'ai', text: llmReply || getResponse(text) },
+      ])
+      setIsTyping(false)
     },
-    [typing]
+    [isTyping]
   )
 
   return (
@@ -289,7 +296,7 @@ export const AIAgent = () => {
                     <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
                   </span>
-                  <span className="text-[11px] text-emerald-400 font-mono">Online · replies instantly</span>
+                  <span className="text-[11px] text-emerald-400 font-mono">Online · AI-powered</span>
                 </div>
               </div>
               <button
@@ -324,7 +331,7 @@ export const AIAgent = () => {
                 </motion.div>
               ))}
 
-              {typing && (
+              {isTyping && (
                 <motion.div
                   key="typing"
                   initial={{ opacity: 0, y: 8 }}
@@ -333,14 +340,17 @@ export const AIAgent = () => {
                 >
                   <AvatarAI />
                   <div className="bg-slate-800 border border-slate-700/60 rounded-2xl rounded-tl-sm px-4 py-3">
-                    <div className="flex gap-1.5">
-                      {[0, 1, 2].map((i) => (
-                        <span
-                          key={i}
-                          className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce"
-                          style={{ animationDelay: `${i * 0.15}s` }}
-                        />
-                      ))}
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex gap-1.5">
+                        {[0, 1, 2].map((i) => (
+                          <span
+                            key={i}
+                            className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce"
+                            style={{ animationDelay: `${i * 0.15}s` }}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-mono">Rohit&apos;s AI is typing…</span>
                     </div>
                   </div>
                 </motion.div>
@@ -377,7 +387,7 @@ export const AIAgent = () => {
                 />
                 <button
                   type="submit"
-                  disabled={!input.trim() || typing}
+                  disabled={!input.trim() || isTyping}
                   aria-label="Send message"
                   className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-cyan-600 text-[#020408] flex items-center justify-center flex-shrink-0 disabled:opacity-40 hover:shadow-[0_0_16px_rgba(6,182,212,0.5)] transition-shadow"
                 >
