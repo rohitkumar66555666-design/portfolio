@@ -265,7 +265,7 @@ export const AIAgent = () => {
               transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
             />
             <span className="text-lg leading-none">🤖</span>
-            <span className="whitespace-nowrap">Ask about&apos;s me</span>
+            <span className="whitespace-nowrap">Ask about&apos; me</span>
           </motion.button>
         )}
       </AnimatePresence>
