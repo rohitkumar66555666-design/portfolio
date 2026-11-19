@@ -1,0 +1,71 @@
+:root {
+  color-scheme: dark;
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5625rem; --text-2xl: 1.953rem; --text-3xl: 2.441rem;
+  --text-display-s: clamp(2.25rem, 4vw + 0.5rem, 3.75rem); --text-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
+  --text-section: clamp(2rem, 2.5vw + 1rem, 3.5rem); --text-title: clamp(1.25rem, 0.75vw + 0.875rem, 1.625rem); --text-lead: clamp(1.125rem, 0.35vw + 1rem, 1.375rem);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
+  --color-error: #ef4444; --color-success: #ccff00;
+  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+
+  /* ── "The Hyper-Scale Carbon" System (Deep Carbon + Solar Amber + Acid Green) ──
+   * 60% Background: #0D0E10 (Matte Carbon Black)
+   * 30% Structure & Elements: #F5A623 (Solar Amber / Dark Gold)
+   * Text Contrast: #E2E8F0 (Clean Platinum Silver) / #FFFFFF (Pure Crisp White)
+   * 10% Selective Accent: #CCFF00 (Electric Acid Lime - 1% focus for live indicators & cues)
+   */
+  --color-paper: #0d0e10;       /* 60%: Matte Carbon Black */
+  --color-paper-2: #14161b;     /* Elevated Bento Card Surface */
+  --color-paper-3: #16181d;     /* Uniform Dark Grey for skill tags & insets */
+  --color-ink: #f6f8fb;         /* Bespoke Platinum White headings & high-contrast labels */
+  --color-ink-2: #e2e8f0;       /* Clean Platinum Silver body text */
+  --color-muted: #94a3b8;       /* Clean slate muted labels & metadata */
+
+  /* Sharp 1px Borders over Shadows: 1px solid rgba(229, 184, 105, 0.15) */
+  --color-rule: rgba(229, 184, 105, 0.15); /* Razor-sharp 1px subtle gold hairline border */
+  --color-rule-2: #f5a623;                 /* Solar Amber hover hairline */
+
+  /* 30%: Solar Amber / Dark Gold (High-Voltage Energy: CTAs, Metrics, Highlights) */
+  --color-accent: #f5a623;      /* Solar Amber */
+  --color-accent-2: #e59817;    /* Deep Solar Amber */
+  --color-accent-wash: rgba(245, 166, 35, 0.14); /* 14% Solar Amber Wash */
+  --color-accent-border: rgba(245, 166, 35, 0.40);
+  --color-accent-ink: #0d0e10;  /* High-contrast Carbon Black text on Solar Amber */
+  --color-focus: #f5a623;       /* Solar Amber focus ring */
+  --color-accent-deep: #b87508;
+  --color-accent-edge: #ffb84d;
+  --color-accent-violet: #4f46e5;
+  --shadow-accent-glow: 0 0 20px rgba(245, 166, 35, 0.18); /* 18% Subtle Drop Shadow Glow */
+
+  /* Gold Aliases (Full backwards-compatibility) */
+  --color-gold: #f5a623;
+  --color-gold-wash: rgba(245, 166, 35, 0.14);
+  --color-gold-border: rgba(245, 166, 35, 0.40);
+  --shadow-gold-glow: 0 0 20px rgba(245, 166, 35, 0.18);
+
+  /* 10% Selective Accent: Electric Acid Lime (#CCFF00 for 1% blink dots, terminal cues) */
+  --color-green: #ccff00;       /* Electric Acid Lime */
+  --color-green-soft: rgba(204, 255, 0, 0.12); /* 12% Acid Lime Wash */
+  --color-green-border: rgba(204, 255, 0, 0.35);
+
+  /* Dedicated Systems Code Theme (Rule 2: text white, numbers #f5a623, functions #4f46e5) */
+  --color-code-bg: #111216;     /* Carbon Black code container */
+  --color-code-ink: #f6f8fb;    /* Platinum code text */
+  --color-code-rule: rgba(245, 166, 35, 0.15); /* Clean hairline border */
+  --color-code-gold: #f5a623;   /* Solar Amber numeric constants */
+  --color-code-violet: #4f46e5; /* Indigo function tokens */
+
+  --font-display: "Familjen Grotesk", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-outlier: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-card: 16px;
+  --radius-entry: 18px;
+  --radius-pill: 999px;
+  --rule-hair: 1px;
+  --shadow-card: none;
+  --tracking-display: -0.028em;
+  --display-weight: 600;
+}

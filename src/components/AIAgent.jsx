@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send } from 'lucide-react'
+import { X, Send, Bot, User } from 'lucide-react'
 
 /* ════════════════════════════════════════════════════════════════════
    Local Knowledge Base — offline fallback for Rohit's AI assistant.
@@ -20,9 +20,9 @@ const KB = [
   },
   {
     topic: 'About Rohit',
-    keywords: ['who', 'about', 'rohit', 'yourself', 'bio', 'intro', 'background', 'bawa', 'kumar ram'],
+    keywords: ['who', 'about', 'rohit', 'yourself', 'bio', 'intro', 'background', 'bawa', 'kumar'],
     answer:
-      "🤖 Rohit Kumar Ram is a Full Stack, Mobile & AI Developer who ships production-grade, user-obsessed products.\n\nHe's pursuing a B.Sc. in Software Development at Tata Institute of Social Sciences (TISS) and already builds real AI tools and client apps — from zero-cloud RAG agents to React Native products with thousands of screens' worth of production logic.\n\nThis portfolio? Built with React, Three.js and a lot of ☕.",
+      "🤖 Rohit Kumar(Bawa) is a Full Stack, Mobile & AI Developer who ships production-grade, user-obsessed products.\n\nHe's pursuing a B.Sc. in Software Development at Tata Institute of Social Sciences (TISS) and already builds real AI tools and client apps — from zero-cloud RAG agents to React Native products with thousands of screens' worth of production logic.\n\nThis portfolio? Built with React, Three.js and a lot of ☕.",
   },
   {
     topic: 'Skills & Tech Stack',
@@ -40,18 +40,20 @@ const KB = [
     keywords: [
       'experience', 'work', 'job', 'intern', 'internship', 'appopoleis', 'integrate 360',
       'company', 'studio', 'employ', 'career', 'role', 'position', 'professional', 'currently', 'client',
+      'kaam', 'kaha kaam', 'job history', 'work history', 'kis company',
     ],
     answer:
-      "💼 Rohit's professional experience:\n\n1. 🤖 AI Developer Intern — Appopoleis Studios (Sep 2024 – Present)\n   • Built a 10+ screen Photo Sharing Mobile App with real-time feeds, auth & Cloudinary media optimization\n   • Built Mawqif — a 15+ screen prayer-location app for Muslim travelers (React Native, TypeScript, Supabase, PostgreSQL, Google Maps API)\n   • Contributed to 3–5 production client web & mobile apps\n\n2. 💻 Software Developer Intern — Integrate 360 (Feb – Apr 2024)\n   • Built responsive web apps with React, JavaScript, HTML & CSS; resolved legacy frontend bugs\n\nHe's eager for the next challenge — reach out via the Contact section or LinkedIn!",
+      "💼 Rohit's Professional Experience & Career Track:\n\n1. 🤖 AI Developer Intern — Appopoleis Studios (Mumbai) [Sep 2024 – Present]\n   • Specialization: Zero-cloud RAG pipelines, local LLM backends & private vector architectures.\n   • Mobile Engineering: Built client-facing React Native applications with real-time sync.\n   • Production Impact: Direct contributor to 3–5 commercial client deployments.\n\n2. 💻 Software Developer Intern — Integrate 360 (Mumbai) [Feb 2024 – Apr 2024]\n   • Frontend Engineering: Built responsive web interfaces with React, modern JavaScript & CSS.\n   • Code Architecture: Modularized component libraries to boost reusability and optimize load speed.\n\n3. 🎓 Academic Background — Tata Institute of Social Sciences (TISS) [2024 – Present]\n   • Pursuing B.Sc. in Software Development with specialization in full-stack & applied AI systems.\n\nWant to discuss engineering roles? Reach out via the Contact section or email!",
   },
   {
     topic: 'Projects',
     keywords: [
-      'project', 'built', 'reels', 'hermes', 'rag', 'zero-cloud', 'zero cloud',
+      'project', 'projects', 'built', 'reels', 'hermes', 'rag', 'zero-cloud', 'zero cloud',
       'mawqif', 'photo sharing', 'streamlit', 'generator', 'showcase', 'demo', 'case study', 'portfolio',
+      'kya banaya', 'konsa app', 'apps', 'github repo', 'repositories',
     ],
     answer:
-      "🚀 Rohit's highlighted projects:\n\n1. 🧠 Hermes 3 — Intelligent RAG Agent System\n   A local zero-cloud RAG pipeline: Python, LangChain, Ollama, ChromaDB, HuggingFace embeddings & Streamlit. Fully private — no cloud dependency, no data leaks.\n\n2. 🎬 AI Reels Idea Generator\n   A creator-focused SaaS dashboard automating scripts, hooks & hashtags with prompt-driven tone switching.\n\nPlus production client apps like Mawqif (prayer-location app) shipped at Appopoleis Studios. Scroll to the Projects section to explore!",
+      "🚀 Rohit's Highlighted Engineering Projects:\n\n1. 🧠 Hermes 3: Intelligent Local RAG Agent (Flagship)\n   • Stack: LangChain, Hermes-3-8B LLM (Ollama), ChromaDB, BAAI/bge-small embeddings, Streamlit.\n   • Architecture: 100% private offline document QA, zero cloud egress, sub-second cosine lookup.\n\n2. 🎬 AI Reels Idea Generator SaaS\n   • Stack: React, OpenAI GPT-4, Groq sub-3s API, Node.js, Tailwind CSS.\n   • Architecture: Automated viral hook, script & hashtag generator with dynamic tone switching.\n\n3. 📍 Mawqif: Smart Prayer Location Mobile App\n   • Stack: React Native, Expo, Supabase, PostgreSQL, Google Maps API, TypeScript.\n   • Architecture: 15+ modular screens, real-time GPS navigation (< 1.2m delta), nearby mosque locator.\n\n4. 📸 Real-Time Photo Sharing Mobile Application\n   • Stack: React Native, TypeScript, Node.js, Express, Cloudinary CDN, MongoDB.\n   • Architecture: 10+ screens, infinite scroll feeds, social follow/unfollow system, fast aggregation queries.\n\nCheck the Projects section on this page to inspect live architecture specs!",
   },
   {
     topic: 'Education',
@@ -70,6 +72,30 @@ const KB = [
   },
 ]
 
+const KB_EXPERIENCE_AND_PROJECTS = `🎯 Executive Overview: Rohit's Work Experience & Projects
+
+💼 Professional Work Experience:
+1. 🤖 AI Developer Intern — Appopoleis Studios (Sep 2024 – Present)
+   • Built offline RAG pipelines & private vector retrieval systems.
+   • Shipped 2 major mobile apps (Mawqif 15+ screens & Photo Sharing 10+ screens).
+   • Contributed to 3–5 commercial client deployments.
+2. 💻 Software Developer Intern — Integrate 360 (Feb 2024 – Apr 2024)
+   • Engineered responsive React web frontends and modular UI components.
+3. 🎓 Academic Background — Tata Institute of Social Sciences (TISS)
+   • B.Sc. in Software Development (2024 – Present).
+
+🚀 Core Engineering Projects:
+1. 🧠 Hermes 3 Local RAG Agent:
+   • 100% private offline document QA using LangChain, Ollama (Hermes-3-8B) & ChromaDB.
+2. 🎬 AI Reels Idea Generator SaaS:
+   • Sub-3s viral hook, script & hashtag generation via Groq API & GPT-4.
+3. 📍 Mawqif Mosque & Prayer Finder:
+   • 15+ screen React Native mobile app with real-time GPS navigation & Supabase backend.
+4. 📸 Real-Time Photo Sharing App:
+   • 10+ screen React Native mobile application with Cloudinary media CDN & MongoDB.
+
+You can inspect the Projects and Timeline sections on this page for live architecture diagrams and repos!`
+
 const FALLBACK =
   "Hmm, that one's outside my knowledge base 🤔 — I'm tuned to pitch Rohit's skills, experience, projects and contact info.\n\nTry one of the quick topics below, or ask something like \"What can Rohit build for us?\""
 
@@ -85,7 +111,7 @@ const QUICK_REPLIES = [
 ]
 
 /* Simulated "thinking" delay before any AI reply is revealed (ms) */
-const TYPING_DELAY_MS = 5000
+const TYPING_DELAY_MS = 800
 
 /* ── Fallback parser: keyword scoring with word-boundary safety ────── */
 
@@ -98,6 +124,15 @@ function getResponse(raw) {
       .replace(/\s+/g, ' ')
       .trim() +
     ' '
+
+  // Check for combined query (e.g. "experience n project", "experience and project", "kaam aur project")
+  // Regex includes 'ecperien' to catch common user typo 'ecperience'
+  const hasExperience = /(experien|ecperien|work|job|intern|career|kaam|company|kaha)/.test(normalized)
+  const hasProjects = /(project|proj|projt|built|banaya|kya banaya|apps|app|software|saas)/.test(normalized)
+
+  if (hasExperience && hasProjects) {
+    return KB_EXPERIENCE_AND_PROJECTS
+  }
 
   let best = null
   let bestScore = 0
@@ -155,14 +190,14 @@ async function fetchLLMReply(history) {
    ════════════════════════════════════════════════════════════════════ */
 
 const AvatarAI = () => (
-  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-sm flex-shrink-0 shadow-[0_0_10px_rgba(6,182,212,0.4)]">
-    🤖
+  <div className="w-7 h-7 rounded bg-[var(--color-paper-3)] border border-[var(--color-rule)] flex items-center justify-center text-[var(--color-ink)] flex-shrink-0">
+    <Bot size={15} aria-hidden="true" />
   </div>
 )
 
 const AvatarUser = () => (
-  <div className="w-7 h-7 rounded-lg bg-slate-700 border border-slate-600 flex items-center justify-center text-[11px] font-bold text-cyan-300 flex-shrink-0">
-    R
+  <div className="w-7 h-7 rounded bg-[var(--color-paper-3)] border border-[var(--color-rule)] flex items-center justify-center text-[var(--color-muted)] flex-shrink-0">
+    <User size={15} aria-hidden="true" />
   </div>
 )
 
@@ -249,23 +284,14 @@ export const AIAgent = () => {
             key="ai-fab"
             onClick={() => setOpen(true)}
             aria-label="Open Rohit's AI assistant chat"
-            className="fixed bottom-16 right-4 sm:right-6 z-[9999] flex items-center gap-2 px-5 py-3.5 rounded-full font-semibold text-sm text-[#020408] bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-300 hover:to-cyan-400 transition-colors"
-            style={{ boxShadow: '0 0 24px rgba(6,182,212,0.55), 0 0 60px rgba(6,182,212,0.25), 0 8px 24px rgba(0,0,0,0.4)' }}
+            className="fixed bottom-6 right-6 z-[999] btn-cobalt-primary shadow-lg shadow-black/40 focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] motion-safe:active:scale-95"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
           >
-            <motion.span
-              aria-hidden="true"
-              className="absolute inset-0 rounded-full border-2 border-cyan-400 pointer-events-none"
-              animate={{ scale: [1, 1.4], opacity: [0.6, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
-            />
-            <span className="text-lg leading-none">🤖</span>
-            <span className="whitespace-nowrap">Ask about me</span>
+            <Bot size={16} aria-hidden="true" />
+            <span className="whitespace-nowrap font-medium">Ask AI Assistant</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -277,94 +303,72 @@ export const AIAgent = () => {
             key="ai-chat"
             role="dialog"
             aria-label="Rohit's AI assistant chat"
-            className="fixed bottom-[136px] right-4 sm:right-6 z-[9999] w-[min(92vw,380px)] h-[min(68vh,540px)] flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden"
-            style={{ boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 40px rgba(6,182,212,0.18)' }}
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
+            className="fixed bottom-6 right-6 z-[999] w-[min(92vw,380px)] h-[min(68vh,520px)] flex flex-col bento-card bg-[var(--color-paper-2)] overflow-hidden border border-[var(--color-rule-2)]"
+            initial={{ opacity: 0, y: 16, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+            exit={{ opacity: 0, y: 16, scale: 0.98 }}
+            transition={{ duration: 0.2 }}
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-800 bg-slate-900/95 flex-shrink-0">
-              <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-lg flex-shrink-0 shadow-[0_0_16px_rgba(6,182,212,0.5)]">
-                🤖
+            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--color-rule)] bg-[var(--color-paper-2)] flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-[var(--color-paper-3)] border border-[var(--color-rule-2)] flex items-center justify-center text-[var(--color-ink)] flex-shrink-0">
+                <Bot size={16} aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white leading-tight">Rohit&apos;s AI Assistant</p>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-                  </span>
-                  <span className="text-[11px] text-emerald-400 font-mono">Online · AI-powered</span>
+                <p className="text-xs font-semibold text-[var(--color-ink)] leading-tight">Rohit&apos;s AI Representative</p>
+                <div className="flex items-center gap-1.5 mt-0.5 font-measured text-[11px] text-[var(--color-green)] font-medium">
+                  <span>verified telemetry</span>
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="w-7 h-7 rounded flex items-center justify-center text-[var(--color-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper-3)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] motion-safe:active:scale-95 transition-colors"
               >
-                <X size={16} />
+                <X size={15} aria-hidden="true" />
               </button>
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-[var(--color-paper)]">
               {messages.map((m) => (
-                <motion.div
+                <div
                   key={m.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25 }}
                   className={`flex gap-2 ${m.from === 'user' ? 'flex-row-reverse' : ''}`}
                 >
                   {m.from === 'ai' ? <AvatarAI /> : <AvatarUser />}
                   <div
-                    className={`max-w-[80%] px-3.5 py-2.5 text-[13px] leading-relaxed whitespace-pre-line ${
-                      m.from === 'user'
-                        ? 'bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-2xl rounded-tr-sm shadow-[0_0_18px_rgba(6,182,212,0.35)]'
-                        : 'bg-slate-800 text-slate-100 border border-slate-700/60 rounded-2xl rounded-tl-sm'
-                    }`}
+                    className={`max-w-[82%] px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line rounded-xl ${m.from === 'user'
+                      ? 'bg-[var(--color-accent)] text-[var(--color-accent-ink)] font-medium'
+                      : 'bg-[var(--color-paper-3)] text-[var(--color-ink)] border border-[var(--color-rule)]'
+                      }`}
                   >
                     {m.text}
                   </div>
-                </motion.div>
+                </div>
               ))}
 
               {isTyping && (
-                <motion.div
+                <div
                   key="typing"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
                   className="flex gap-2"
                 >
                   <AvatarAI />
-                  <div className="bg-slate-800 border border-slate-700/60 rounded-2xl rounded-tl-sm px-4 py-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex gap-1.5">
-                        {[0, 1, 2].map((i) => (
-                          <span
-                            key={i}
-                            className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce"
-                            style={{ animationDelay: `${i * 0.15}s` }}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-[11px] text-slate-400 font-mono">Rohit&apos;s AI is typing…</span>
-                    </div>
+                  <div className="bg-[var(--color-paper-3)] border border-[var(--color-rule)] rounded-xl px-3 py-2 text-xs font-measured text-[var(--color-muted)]">
+                    processing query response…
                   </div>
-                </motion.div>
+                </div>
               )}
             </div>
 
             {/* Quick replies + Input */}
-            <div className="p-3 border-t border-slate-800 bg-slate-900/95 flex-shrink-0">
-              <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="p-3.5 border-t border-[var(--color-rule)] bg-[var(--color-paper-2)] flex-shrink-0 space-y-2.5">
+              <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {QUICK_REPLIES.map((q) => (
                   <button
                     key={q.label}
                     onClick={() => send(q.query)}
-                    className="px-3 py-1.5 text-xs rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400/50 transition-colors whitespace-nowrap flex-shrink-0"
+                    className="chip-neutral hover:border-[var(--color-accent)] hover:text-[var(--color-ink)] transition-colors whitespace-nowrap flex-shrink-0 focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] motion-safe:active:scale-95 disabled:opacity-50"
                   >
                     {q.label}
                   </button>
@@ -381,17 +385,17 @@ export const AIAgent = () => {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about skills, projects, experience…"
+                  placeholder="Ask about skills, projects, background..."
                   aria-label="Message Rohit's AI assistant"
-                  className="flex-1 min-w-0 bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/40 transition-colors"
+                  className="flex-1 min-w-0 bg-[var(--color-paper-3)] border border-[var(--color-rule)] rounded-[var(--radius-pill)] px-3.5 py-2 text-xs text-[var(--color-ink)] placeholder-[var(--color-muted)]/60 outline-none focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] focus:border-[var(--color-rule-2)] transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
                   aria-label="Send message"
-                  className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-cyan-600 text-[#020408] flex items-center justify-center flex-shrink-0 disabled:opacity-40 hover:shadow-[0_0_16px_rgba(6,182,212,0.5)] transition-shadow"
+                  className="w-9 h-9 rounded-full bg-[var(--color-accent)] text-[var(--color-accent-ink)] flex items-center justify-center flex-shrink-0 disabled:opacity-40 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] motion-safe:active:scale-95 transition-opacity"
                 >
-                  <Send size={16} />
+                  <Send size={14} aria-hidden="true" />
                 </button>
               </form>
             </div>

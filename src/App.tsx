@@ -1,112 +1,51 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Navbar }       from './components/Navbar'
-import { Hero }         from './components/Hero'
-import { About }        from './components/About'
-import { Projects }     from './components/Projects'
-import { Skills }       from './components/Skills'
-import { Timeline }     from './components/Timeline'
-import { Contact }      from './components/Contact'
-import { Footer }       from './components/Footer'
-import { Canvas3D }     from './components/Canvas3D'
-import { Preloader }    from './components/Preloader'
-import { CustomCursor } from './components/CustomCursor'
-import { TimelineHUD }  from './components/TimelineHUD'
-import { AIAgent }      from './components/AIAgent'
-import { playRipple, resumeAudio } from './utils/audio'
-
-const SECTION_PORTS = [
-  { id: 'home',     color: '#06b6d4' },
-  { id: 'about',    color: '#a855f7' },
-  { id: 'projects', color: '#ec4899' },
-  { id: 'skills',   color: '#00ff88' },
-  { id: 'timeline', color: '#06b6d4' },
-  { id: 'contact',  color: '#a855f7' },
-] as const
+import React from 'react'
+import { motion, useScroll, useSpring } from 'framer-motion'
+import { AmbientBackground } from './components/AmbientBackground'
+import { Navbar } from './components/Navbar'
+import { Hero } from './components/Hero'
+import { About } from './components/About'
+import { Projects } from './components/Projects'
+import { Skills } from './components/Skills'
+import { Timeline } from './components/Timeline'
+import { Contact } from './components/Contact'
+import { AIAgent } from './components/AIAgent'
 
 export const App: React.FC = () => {
-  const [done, setDone] = useState(false)
-
-  useEffect(() => {
-    const resume = () => resumeAudio()
-    window.addEventListener('pointerdown', resume, { once: true })
-    window.addEventListener('keydown', resume, { once: true })
-    return () => {
-      window.removeEventListener('pointerdown', resume)
-      window.removeEventListener('keydown', resume)
-    }
-  }, [])
-
-  useEffect(() => {
-    const throttled: Record<string, number> = {}
-    const onScroll = () => {
-      const scrollY = window.scrollY
-      const max = document.body.scrollHeight - window.innerHeight
-      if (max <= 0) return
-      const pct = scrollY / max
-      const activeIndex = SECTION_PORTS.findIndex(s => {
-        const el = document.getElementById(s.id)
-        return el && scrollY >= (el.offsetTop - 140)
-      })
-      const key = `sec${activeIndex}`
-      const last = throttled[key]
-      if (last && performance.now() - last < 320) return
-      throttled[key] = performance.now()
-      playRipple(0.18 + pct * 0.5)
-    }
-    let ticking = false
-    const onScrollThrottled = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          onScroll()
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-    window.addEventListener('scroll', onScrollThrottled, { passive: true })
-    return () => window.removeEventListener('scroll', onScrollThrottled)
-  }, [])
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  })
 
   return (
-    <>
-      <CustomCursor />
-      <TimelineHUD />
+    <div className="min-h-screen text-[var(--color-ink)] font-body relative selection:bg-[var(--color-accent)] selection:text-[var(--color-accent-ink)]">
+      {/* Precision Scroll Telemetry Bar */}
+      <motion.div
+        aria-hidden="true"
+        className="fixed top-0 left-0 right-0 h-[2.5px] bg-[var(--color-accent)] origin-left z-[9999] pointer-events-none"
+        style={{ scaleX }}
+      />
 
-      {!done && (
-        <Preloader onComplete={() => setDone(true)} />
-      )}
+      {/* Bespoke Dot-Matrix Grid & Telemetry HUD */}
+      <AmbientBackground />
 
-      <div
-        className="relative bg-[#020408] text-[#e8edf5] overflow-x-hidden noise"
-        style={{ opacity: done ? 1 : 0, transition: 'opacity 0.5s ease 0.2s', touchAction: 'pan-y', overscrollBehaviorY: 'auto' as any }}
-      >
-        <Canvas3D />
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'fixed', inset: 0, zIndex: -5,
-            pointerEvents: 'none',
-            background: 'radial-gradient(ellipse 130% 90% at 50% 50%, rgba(2,4,8,0.3) 0%, rgba(2,4,8,0.65) 100%)',
-          }}
-        />
-        <div className="scan-line" />
-        <Navbar />
+      {/* Navigation */}
+      <Navbar />
 
-        <main className="relative z-10" style={{ touchAction: 'pan-y' }}>
-          <section id="home" style={{ touchAction: 'pan-y' }}>    <Hero />     </section>
-          <section id="about" style={{ touchAction: 'pan-y' }}>   <About />    </section>
-          <section id="projects" style={{ touchAction: 'pan-y' }}><Projects /> </section>
-          <section id="skills" style={{ touchAction: 'pan-y' }}>  <Skills />   </section>
-          <section id="timeline" style={{ touchAction: 'pan-y' }}><Timeline /> </section>
-          <section id="contact" style={{ touchAction: 'pan-y' }}> <Contact />  </section>
-        </main>
+      {/* Main Content Sections */}
+      <main className="relative z-10">
+        <Hero />
+        <About />
+        <Projects />
+        <Skills />
+        <Timeline />
+        <Contact />
+      </main>
 
-        <div className="pb-14" style={{ touchAction: 'pan-y' }}><Footer /></div>
-
-        {/* Floating AI Career Assistant — fixed overlay, visible across all sections */}
-        <AIAgent />
-      </div>
-    </>
+      {/* Floating AI Career Assistant */}
+      <AIAgent />
+    </div>
   )
 }
 

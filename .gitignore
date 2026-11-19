@@ -26,3 +26,9 @@ dist-ssr
 
 # Vercel
 .vercel
+
+# Local design / scratch
+.hallmark/
+legacy/
+scripts/
+

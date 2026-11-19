@@ -1,96 +1,134 @@
 import React from 'react'
-import { motion } from 'framer-motion'
-import { Github, Linkedin, Twitter, Mail, Phone } from 'lucide-react'
+import { Github, Linkedin, Twitter, Mail, Phone, ArrowUp, Terminal } from 'lucide-react'
 
-const IgIcon = ({ size = 15 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+const IgIcon = ({ size = 14 }: { size?: number }) => (
+  <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
     <circle cx="12" cy="12" r="4"/>
     <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
   </svg>
 )
 
-const NAV_LINKS = ['Home','About','Projects','Skills','Timeline','Contact']
+const NAV_LINKS = [
+  { label: 'home', id: 'home' },
+  { label: 'about', id: 'about' },
+  { label: 'projects', id: 'projects' },
+  { label: 'skills', id: 'skills' },
+  { label: 'experience', id: 'timeline' },
+  { label: 'contact', id: 'contact' },
+]
 
 const SOCIAL = [
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/rohit-kumar-a2979839b', icon: <Linkedin size={14}/>, color: '#0a66c2' },
-  { label: 'Twitter / X', href: 'https://x.com/RohitBawa26', icon: <Twitter size={14}/>, color: '#1da1f2' },
-  { label: 'Instagram', href: 'https://instagram.com/rohitbawahightech', icon: <IgIcon size={14}/>, color: '#ec4899', isIg: true },
-  { label: 'GitHub', href: 'https://github.com/rohitkumar66555666-design', icon: <Github size={14}/>, color: '#e8edf5' },
-  { label: 'Email', href: 'mailto:rohitkumar66555666@gmail.com', icon: <Mail size={14}/>, color: '#06b6d4' },
+  { label: 'GitHub', href: 'https://github.com/rohitkumar66555666-design', icon: Github },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/rohit-kumar-a2979839b', icon: Linkedin },
+  { label: 'Twitter', href: 'https://x.com/RohitBawa26', icon: Twitter },
+  { label: 'Instagram', href: 'https://instagram.com/rohitbawahightech', icon: IgIcon },
+  { label: 'Email', href: 'mailto:rohitkumar66555666@gmail.com', icon: Mail },
 ]
 
 export const Footer: React.FC = () => {
-  const scrollTo = (id: string) => document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' })
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
-    <footer className="border-t border-[#1a2030] bg-[#020408]">
-      <div className="max-w-7xl mx-auto px-6 py-14">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
-
-          {/* Brand */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <p className="text-xl font-black" style={{
-              background: 'linear-gradient(135deg,#06b6d4,#a855f7,#ec4899)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            }}>Rohit Kumar (Bawa)</p>
-            <p className="text-[#5a6478] text-sm mt-1 font-mono">AI Developer · Mobile & Full Stack Engineer</p>
-            <div className="flex flex-wrap gap-4 mt-3">
-              <a href="mailto:rohitkumar66555666@gmail.com"
-                className="inline-flex items-center gap-1.5 text-xs text-[#5a6478] hover:text-[#06b6d4] transition-colors font-mono">
-                <Mail size={10}/>rohitkumar66555666@gmail.com
+    <footer className="border-t border-[var(--color-rule)] bg-[var(--color-paper-2)] text-[var(--color-muted)]">
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start justify-between">
+          {/* Mast Brand (Cols 1-5) */}
+          <div className="md:col-span-5 space-y-2">
+            <div className="space-y-0.5">
+              <span className="font-display font-semibold text-xl text-[var(--color-ink)] block">
+                Rohit Kumar
+              </span>
+              <p className="text-xs text-[var(--color-accent)] font-semibold font-measured">
+                AI Developer, Mobile & Full Stack Engineer
+              </p>
+            </div>
+            <p className="text-xs text-[var(--color-muted)] max-w-sm leading-relaxed font-sans">
+              Specialized in private RAG architectures, local LLM applications, and multi-screen React Native products.
+            </p>
+            <div className="flex flex-wrap gap-3 pt-0.5 font-measured text-xs">
+              <a
+                href="mailto:rohitkumar66555666@gmail.com"
+                className="text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] font-medium"
+              >
+                rohitkumar66555666@gmail.com
               </a>
-              <a href="tel:+916299798907"
-                className="inline-flex items-center gap-1.5 text-xs text-[#5a6478] hover:text-[#06b6d4] transition-colors font-mono">
-                <Phone size={10}/>+91 6299798907
+              <a
+                href="tel:+916299798907"
+                className="text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] font-medium"
+              >
+                +91 6299798907
               </a>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Nav links */}
-          <motion.div className="flex flex-wrap gap-x-6 gap-y-2"
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.1 }}>
-            {NAV_LINKS.map(l => (
-              <button key={l} onClick={() => scrollTo(l)}
-                className="text-[#5a6478] hover:text-[#06b6d4] text-sm transition-colors font-mono">{l}</button>
-            ))}
-          </motion.div>
+          {/* Quick Nav Links (Cols 6-8) */}
+          <div className="md:col-span-3 space-y-2">
+            <div className="text-xs font-semibold text-[var(--color-ink)] font-display">
+              Navigation
+            </div>
+            <div className="flex flex-col space-y-1 text-xs">
+              {NAV_LINKS.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="text-left text-xs text-[var(--color-muted)] hover:text-[var(--color-ink)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] transition-colors"
+                >
+                  {link.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-          {/* Social icons */}
-          <motion.div className="flex gap-3"
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.2 }}>
-            {SOCIAL.map((s, i) => (
-              <motion.a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="w-10 h-10 rounded-xl glass flex items-center justify-center text-[#5a6478] transition-colors"
-                whileHover={{
-                  scale: 1.15, y: -4,
-                  color: s.color,
-                  boxShadow: (s as any).isIg
-                    ? '0 0 20px rgba(236,72,153,0.6)'
-                    : `0 0 16px ${s.color}55`,
-                }}
-                whileTap={{ scale: 0.9 }}
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 3 + i * 0.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.25 }}
-              >
-                {s.icon}
-              </motion.a>
-            ))}
-          </motion.div>
+          {/* Social Channels (Cols 9-12) */}
+          <div className="md:col-span-4 space-y-2">
+            <div className="text-xs font-semibold text-[var(--color-ink)] font-display">
+              Verified Networks
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {SOCIAL.map((s) => {
+                const Icon = s.icon
+                return (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target={s.href.startsWith('http') ? '_blank' : undefined}
+                    rel="noopener noreferrer"
+                    className="py-1.5 px-2.5 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-3)] text-[var(--color-muted)] hover:text-[var(--color-ink)] hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] transition-colors flex items-center gap-1.5 text-xs font-medium"
+                  >
+                    <Icon aria-hidden="true" size={13} />
+                    <span>{s.label}</span>
+                  </a>
+                )
+              })}
+            </div>
+          </div>
         </div>
 
-        <motion.div
-          className="mt-10 pt-6 border-t border-[#1a2030] text-center text-[#5a6478] text-xs font-mono"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
-          © 2026 Rohit Kumar (Bawa) · Maharashtra, India · Built with React, Three.js, Framer Motion & Tailwind CSS
-        </motion.div>
+        {/* Bottom Colophon Bar */}
+        <div className="pt-4 border-t border-[var(--color-rule)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-measured">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-green)] animate-pulse" />
+            <span className="text-[var(--color-muted)]">
+              2026 Rohit Kumar · Engineered with React 18, TypeScript, Tailwind & Framer Motion
+            </span>
+          </div>
+
+          <button
+            onClick={scrollToTop}
+            aria-label="Back to top of page"
+            className="flex items-center gap-1.5 text-[var(--color-muted)] hover:text-[var(--color-ink)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] transition-colors"
+          >
+            <span>Back to top</span>
+            <ArrowUp aria-hidden="true" size={13} />
+          </button>
+        </div>
       </div>
     </footer>
   )
